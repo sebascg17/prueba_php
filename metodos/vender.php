@@ -20,13 +20,30 @@ if (isset($_GET['id'])){
 if (isset($_POST['btnVender'])){
     
     $producto = $id;
-    $valor = $_POST['txtValor'];
     $vendidos = $_POST['txtCantidadVendida'];
+    $total = $precio_real*$vendidos;
+    // $valor = $_POST['txtValor'];
+    $valor = $total;
 
+    if($vendidos > $stock){
+        $_SESSION['message'] = 'Error, Se supero la cantidad disponible';
+        $_SESSION['message_type'] = 'danger';
 
+        header("Location: vender.php");
+    }
+    
+    $restanteStock = $stock-$vendidos;
+    
     $query = "INSERT INTO ventas(id_producto, vendidos, valor)
     VALUES ('$producto','$vendidos','$total')";
     $result = mysqli_query($conn, $query);
+
+    //"UPDATE producto SET stock = $restanteStock WHERE id = $id"
+    // $consulta = "UPDATE producto SET
+    // stock = '$restanteStock'
+    // WHERE id = $id";
+    // $resultado = mysql_query($conn, $consulta);
+
 
     $_SESSION['message'] = 'Producto Vendido exitosamente';
     $_SESSION['message_type'] = 'success';
@@ -39,11 +56,13 @@ if (isset($_POST['btnVender'])){
 
 <script src="../js/cantidadVentas.js" defer></script>
 <div class="row justify-content-center">
+    
     <div class="col-8">
         <br>
+    <?php include("../includes/alerta.php") ?>
         <div class="card text-center">
 
-            <form action="vender.php?id=<?php echo $_GET['id']; ?>" method="post">
+            <form action="vender.php?id=<?php echo $_GET['id']; ?>" method="POST">
 
                 <div class="card-header text-bg-primary">
                     <p name="txtNombre_producto"><?php echo $nombre_producto ?></p>
@@ -55,27 +74,28 @@ if (isset($_POST['btnVender'])){
                     <h6 class="card-subtitle">Stock</h6>
                     <p id="cantDisp" class="card-text" name="txtStock"><?php echo $stock ?></p>
                     
-                    <div class="row text-center">
-                        <div class="col-4">
+                    <div class="row justify-content-center">
+                        <!-- <div class="col-4">
                             <button id="disabledBtn" class="btn btn-secondary" onclick="addValueFunction(this);" value="decrease">
                                 -
                             </button>
-                        </div>
+                        </div> -->
+                        <h6 class="card-subtitle">Cantidad:</h6>
                         <div class="col-4">
                             <div class="value_cont">
-                                <h3 id="amount" value="" name="txtCantidadVendida">0</h3>
+                                <input class="form-control text-center" type="text" id="amount" value="0" name="txtCantidadVendida">
                             </div>
                         </div>
-                        <div class="col-4">
+                        <!-- <div class="col-4">
                             <button class="btn btn-secondary"  onclick="addValueFunction(this);" value="increase">
                                 +
                             </button>
-                        </div>
+                        </div> -->
                     </div>
-                    <br>
+                    <!-- <br>
                     <hr>                   
                     <h3 class="card-subtitle">Total:</h3>
-                    <h1 id="total" class="card-text" name="txtValor"><?php echo $totalcompra ?></h1>
+                    <h1 id="total" class="card-text" name="txtValor"><?php echo $totalcompra ?></h1> -->
                 </div>
                 <div class="card-footer">
                     <div class="text-center">
@@ -85,7 +105,10 @@ if (isset($_POST['btnVender'])){
                         <!-- <a id="btnVenderProducto" href="vender.php" class="btn btn-success">
                             Vender
                         </a> -->
-                        <input type="submit" name="btnVender" class="btn btn-success" value="Vender producto">
+                        <!-- <input type="submit" name="btnVender" class="btn btn-success" value="Vender producto"> -->
+                        <button class="btn btn-success" name="btnVender">
+                            Vender
+                        </button>
                     </div>
                 </div>
             </form>
