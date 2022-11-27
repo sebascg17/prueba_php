@@ -17,17 +17,18 @@ if (isset($_GET['id'])){
     }
 }
 
-if (isset($_POST['btnVenderProducto'])){
+if (isset($_POST['btnVender'])){
     
     $producto = $id;
-    $cantidad = $_POST['txtCantidadVendida'];
     $valor = $_POST['txtValor'];
+    $vendidos = $_POST['txtCantidadVendida'];
 
-    $query = "INSERT INTO ventas(producto, vendidos, valor)
-    VALUES ('$producto','$cantidad','$valor')";
+
+    $query = "INSERT INTO ventas(id_producto, vendidos, valor)
+    VALUES ('$producto','$vendidos','$total')";
     $result = mysqli_query($conn, $query);
 
-    $_SESSION['message'] = 'Producto vendido exitosamente';
+    $_SESSION['message'] = 'Producto Vendido exitosamente';
     $_SESSION['message_type'] = 'success';
 
     header("Location: ../vender_producto.php");
@@ -42,7 +43,7 @@ if (isset($_POST['btnVenderProducto'])){
         <br>
         <div class="card text-center">
 
-            <form action="vender.php?id=<?php echo $_GET['id']; ?>">
+            <form action="vender.php?id=<?php echo $_GET['id']; ?>" method="post">
 
                 <div class="card-header text-bg-primary">
                     <p name="txtNombre_producto"><?php echo $nombre_producto ?></p>
@@ -56,8 +57,7 @@ if (isset($_POST['btnVenderProducto'])){
                     
                     <div class="row text-center">
                         <div class="col-4">
-                            <button id="disabledBtn" class="btn btn-secondary"
-                            onclick="addValueFunction(this);return false" value="decrease">
+                            <button id="disabledBtn" class="btn btn-secondary" onclick="addValueFunction(this);" value="decrease">
                                 -
                             </button>
                         </div>
@@ -67,14 +67,13 @@ if (isset($_POST['btnVenderProducto'])){
                             </div>
                         </div>
                         <div class="col-4">
-                            <button class="btn btn-secondary" onclick="addValueFunction(this);return false"
-                            value="increase">
+                            <button class="btn btn-secondary"  onclick="addValueFunction(this);" value="increase">
                                 +
                             </button>
                         </div>
                     </div>
                     <br>
-                    <hr>
+                    <hr>                   
                     <h3 class="card-subtitle">Total:</h3>
                     <h1 id="total" class="card-text" name="txtValor"><?php echo $totalcompra ?></h1>
                 </div>
@@ -83,7 +82,10 @@ if (isset($_POST['btnVenderProducto'])){
                         <a href="../vender_producto.php" class="btn btn-danger">
                             Cancelar
                         </a>
-                        <input type="submit" class="btn btn-success btn-block" name="btnVenderProducto" value="Realizar Venta">
+                        <!-- <a id="btnVenderProducto" href="vender.php" class="btn btn-success">
+                            Vender
+                        </a> -->
+                        <input type="submit" name="btnVender" class="btn btn-success" value="Vender producto">
                     </div>
                 </div>
             </form>
