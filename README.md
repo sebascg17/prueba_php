@@ -10,6 +10,7 @@ GUIA PARA INSTALAR EL PROYECTO
     -buscar listen 443, y reemplazarlo por Listen 4433
     
   -Iniciar MYSQL y Apache
+  
 -Navegador
   -Ir a: localhost:8080
   -Ir a phpMyAdmin y exportar la base de datos 
