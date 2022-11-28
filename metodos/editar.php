@@ -16,7 +16,7 @@ include("../database/db.php");
             $categoria = $row['descripcion'];
             $stock = $row['stock'];
 
-            $precio_real = (float)$precio/(float)$stock;
+            // $precio_real = (float)$precio/(float)$stock;
         }
     }
 
@@ -29,14 +29,13 @@ include("../database/db.php");
         $categoria = $_POST['ddlCategoria'];
         $stock = $_POST['txtStock'];
 
-        $precio_total = (float)$precio*(float)$stock;
+        // $precio_total = (float)$precio*(float)$stock;
 
         $query = "UPDATE producto
         SET nombre_producto = '$nombre_producto',
             referencia = '$referencia',
-            precio = '$precio_total',
+            precio = '$precio',
             peso = '$peso',
-            categoria = '$categoria',
             stock = '$stock'
         WHERE id = $id";
         mysqli_query($conn, $query);
@@ -80,26 +79,13 @@ include("../database/db.php");
                         <div class="input-group">
                             <span class="input-group-text">$</span>
                             <input type="number" name="txtPrecio" class="form-control"
-                            value="<?php echo $precio_real?>">
+                            value="<?php echo $precio?>">
                         </div>
                     </div>
                     <br>
                     <div class="form-group">
                         <label for=""><strong>Peso(kg)</strong><span class="text-danger">*</span></label>
                         <input type="number" name="txtPeso" class="form-control" value="<?php echo $peso;?>">
-                    </div>
-                    <br>
-                    <div class="form-group">
-                        <label for=""><strong>Categoría</strong><span class="text-danger">*</span></label>
-                        <select id="combo" class="form-select" aria-label="Default select example" name="ddlCategoria">
-                            <option selected><?php echo $categoria;?></option>
-                            <?php WHILE($row = $resultado->fetch_assoc()) { ?>
-                                <option value="<?php echo $row['idCategoria']; ?>"><?php echo $row['descripcion']; ?>
-                            </option>
-                            <?php
-                                }
-                            ?>
-                        </select>
                     </div>
                     <br>
                     <div class="form-group">
