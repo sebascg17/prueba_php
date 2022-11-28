@@ -15,5 +15,5 @@ GUIA PARA INSTALAR EL PROYECTO
   -Ir a: localhost:8080
   -Ir a phpMyAdmin y exportar la base de datos 
   -Exportar bases de datos desde la carpeta database/pruebaphp.bd
-  -Ir a localhost:8080/prueba_php
+  -Ir a localhost:8080/prueba_php-main
   
