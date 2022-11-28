@@ -12,11 +12,11 @@
                 <thead>
                     <th>Producto</th>
                     <th>Referencia</th>
-                    <th>Precio Unidad</th>
-                    <th>Precio Total</th>
+                    <th>Precio</th>
                     <th>Peso</th>
                     <th>Categoría</th>
                     <th>Stock</th>
+                    <th>Estado</th>
                     <th>Fecha Creación</th>
                     <th>Accion</th>
                     <tbody>
@@ -26,19 +26,23 @@
 
                         while($row = mysqli_fetch_array($result_producto)){                             
                             $precio = $row['precio'];
-                            $stock = $row['stock'];
-                            $precio_unidad = (float)$precio/(float)$stock;
-                            
+                            $stock = $row['stock'];                            
+                            $estado = $row['estado'];
+                            if($estado==1){
+                                (string)$estado = 'Disponible';
+                            }else{
+                                (string)$estado = '<span class="text-danger">Agotado</span>';
+                            }
                             ?>
                         
                             <tr>
                                 <td><?php echo $row['nombre_producto'] ?></td>
                                 <td><?php echo $row['referencia'] ?></td>
-                                <td>$<?php echo $precio_unidad?></td>
                                 <td>$<?php echo $row['precio']?></td>
                                 <td><?php echo $row['peso'] ?>kg</td>
                                 <td><?php echo $row['descripcion'] ?></td>
                                 <td><?php echo $row['stock'] ?></td>
+                                <td><?php echo $estado ?></td>
                                 <td><?php echo $row['fecha_c'] ?></td>
                                 <td class="text-center">
                                     <a href="metodos/editar.php?id=<?php echo $row['id'] ?>"
