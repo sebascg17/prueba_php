@@ -21,7 +21,16 @@
                     <th>Accion</th>
                     <tbody>
                     <?php
-                        $query = "SELECT * FROM producto p INNER JOIN categorias c on categoria = idCategoria";
+                        $por_pagina=10;
+
+                        if(isset($_GET['pagina'])){            
+                            $pagina=$_GET['pagina'];
+                        }else{
+                            $pagina=1;
+                        }
+                        $empieza=($pagina-1) * $por_pagina;
+                        $query = "SELECT * FROM producto p INNER JOIN categorias c on categoria = idCategoria 
+                        LIMIT $empieza,$por_pagina";
                         $result_producto = mysqli_query($conn, $query);
 
                         while($row = mysqli_fetch_array($result_producto)){                             
@@ -62,8 +71,42 @@
                     </tbody>
                 </thead>
             </table>
+            
+            <?php
+                $query="SELECT * FROM producto p INNER JOIN categorias c on categoria = idCategoria";
+                $resultado=mysqli_query($conn,$query);
+
+                $total_registros=mysqli_num_rows($resultado);
+                $total_paginas=ceil($total_registros/$por_pagina);
+
+
+                echo"<center><a class='paginacion' href='index.php?pagina=1'>"  .'Anterior'. "</a>";
+
+                for($i=1;  $i<=$total_paginas;   $i++){
+                    echo"<a class='paginacion' href='index.php?pagina=".$i."'> ".$i." </a> ";
+                }
+
+                echo"<a class='paginacion' href='index.php?pagina=$total_paginas'>"  .'Siguiente'. "</a></center>";
+            ?>
         </div>
     </div>
 </div>
 
 <?php include("includes/footer.php") ?>
+
+<style>
+.paginacion{
+ padding:15px;
+ margin-left:8px;
+ color: white;
+ text-decoration: none;
+ background: black;
+ display: inline-block;
+ box-sizing: border-box;
+ opacity:0.8;
+ border-radius: 5px;
+}
+a:hover {
+    opacity:1;
+}
+</style>
