@@ -2,8 +2,7 @@
 include("../database/db.php");
 
 if (isset($_GET['id'])){
-    $id = $_GET['id'];
-
+    $id = $_GET['id'];    
     $query = "SELECT * FROM producto WHERE id = $id";
     $result = mysqli_query($conn, $query);
     if(mysqli_num_rows($result) == 1){
@@ -11,8 +10,9 @@ if (isset($_GET['id'])){
         $nombre_producto = $row['nombre_producto'];
         $precio = $row['precio'];
         $stock = $row['stock'];
+        $estado = $row['estado'];
 
-        $precio_real = (float)$precio/(float)$stock;
+        // $precio_real = (float)$precio/(float)$stock;
         $totalcompra = 0;
     }
 }
@@ -21,40 +21,41 @@ if (isset($_POST['btnVender'])){
     
     $producto = $id;
     $vendidos = $_POST['txtCantidadVendida'];
-    $total = $precio_real*$vendidos;
+    $total = $precio*$vendidos;
     // $valor = $_POST['txtValor'];
     $valor = $total;
+    $estado=1;
 
-    if($vendidos > $stock){
-        $_SESSION['message'] = 'Error, Se supero la cantidad disponible';
+    $restanteStock = $stock-$vendidos;
+    if($restanteStock==0){
+        $estado=0;
+    }
+    
+    if($vendidos>$stock){
+        $_SESSION['message'] = 'Adventencia, La cantidad indicada por el usuario supera la cantidad disponible';
         $_SESSION['message_type'] = 'danger';
 
         header("Location: vender.php");
-    }
+    }else{
+        $query = "INSERT INTO ventas(id_producto, vendidos, valor)
+        VALUES ('$producto','$vendidos','$total')";   
     
-    $restanteStock = $stock-$vendidos;
-    
-    $query = "INSERT INTO ventas(id_producto, vendidos, valor)
-    VALUES ('$producto','$vendidos','$total')";
-    $result = mysqli_query($conn, $query);
+        $result = mysqli_query($conn, $query);
+        
+        if($result){
+            $_SESSION['message'] = 'Producto Vendido exitosamente';
+            $_SESSION['message_type'] = 'success';
 
-    //"UPDATE producto SET stock = $restanteStock WHERE id = $id"
-    // $consulta = "UPDATE producto SET
-    // stock = '$restanteStock'
-    // WHERE id = $id";
-    // $resultado = mysql_query($conn, $consulta);
-
-
-    $_SESSION['message'] = 'Producto Vendido exitosamente';
-    $_SESSION['message_type'] = 'success';
-
-    header("Location: ../vender_producto.php");
+            $actualizar = "UPDATE producto SET stock = '$restanteStock', estado = '$estado' WHERE id = $id";
+            mysqli_query($conn, $actualizar);
+        }
+        header("Location: ../vender_producto.php");
+    }       
 }
 ?>
 
 <?php include("../includes/header.php") ?>
 
-<script src="../js/cantidadVentas.js" defer></script>
 <div class="row justify-content-center">
     
     <div class="col-8">
@@ -69,7 +70,7 @@ if (isset($_POST['btnVender'])){
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">Precio:</h5>
-                    <p id="precio" class="card-text" name="txtPrecio"><?php echo $precio_real ?></p>
+                    <p id="precio" class="card-text" name="txtPrecio"><?php echo $precio ?></p>
 
                     <h6 class="card-subtitle">Stock</h6>
                     <p id="cantDisp" class="card-text" name="txtStock"><?php echo $stock ?></p>
@@ -83,7 +84,8 @@ if (isset($_POST['btnVender'])){
                         <h6 class="card-subtitle">Cantidad:</h6>
                         <div class="col-4">
                             <div class="value_cont">
-                                <input class="form-control text-center" type="text" id="amount" value="0" name="txtCantidadVendida">
+                                <!-- <h4  id="amount"  name="txtCantidadVendida">0</h4> -->
+                                <input class="form-control text-center" type="text" id="amount" value="" name="txtCantidadVendida">
                             </div>
                         </div>
                         <!-- <div class="col-4">
@@ -95,7 +97,7 @@ if (isset($_POST['btnVender'])){
                     <!-- <br>
                     <hr>                   
                     <h3 class="card-subtitle">Total:</h3>
-                    <h1 id="total" class="card-text" name="txtValor"><?php echo $totalcompra ?></h1> -->
+                    <h1 id="total" class="card-text" name="txtValor"><?php //echo $totalcompra ?></h1> -->
                 </div>
                 <div class="card-footer">
                     <div class="text-center">
