@@ -27,7 +27,7 @@ if (isset($_POST['btnVender'])){
         $estado=0;
     }
     
-    if($restanteStock<=0){
+    if($restanteStock<0){
         
 
         $_SESSION['message'] = 'La cantidad a vender no puede superar el stock';
