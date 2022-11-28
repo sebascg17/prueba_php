@@ -9,12 +9,13 @@ if (isset($_POST['btnGuardar_producto'])){
     $peso = $_POST['txtPeso'];
     $categoria = $_POST['ddlCategoria'];
     $stock = $_POST['txtStock'];
+    $estado = 1;
 
     //Da el valor del producto multiplcada la cantidad
-    $precio_total=(float)$precio*(float)$stock;
+    // $precio_total=(float)$precio*(float)$stock;
 
-    $query = "INSERT INTO producto(nombre_producto, referencia, precio, peso, categoria, stock)
-    VALUES ('$nombre_producto','$referencia','$precio_total','$peso','$categoria','$stock')";
+    $query = "INSERT INTO producto(nombre_producto, referencia, precio, peso, categoria, stock, estado)
+    VALUES ('$nombre_producto','$referencia','$precio','$peso','$categoria','$stock','$estado')";
     $result = mysqli_query($conn, $query);
     if(!$result){
         die("Query fallido");
