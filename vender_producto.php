@@ -1,46 +1,75 @@
 <?php include("database/db.php") ?>
 <?php include("includes/header.php") ?>
 <?php include("includes/nav.php") ?>
-
-<script src="js/cantidadVentas.js" defer></script>
-
+<style type="text/css">
+</style>
+<script src="js/variables.js"></script>
 <div class="container p-4">
     <div class="row">
     <?php
-        $query = "SELECT * FROM producto p INNER JOIN categorias c on categoria = idCategoria";
+        $query = "SELECT * FROM producto p INNER JOIN categorias c on categoria = idCategoria where estado=1";
         $result_producto = mysqli_query($conn, $query);
+        // if($result_producto){
 
+        // }
 
         while($row = mysqli_fetch_array($result_producto)){ 
             
             $precio = $row['precio'];
             $stock = $row['stock'];
-            $precio_unidad = (float)$precio/$stock;
+            
+            // if($stock==0){
+                
+            // }
+            // $precio_unidad = (float)$precio/$stock;
             ?>
+            
             <div class="col-md-4 col-sm-12">
-                <div class="card text-center">
+                <div name="dvProducto" id="dvProducto" class="card text-center">
                     <div class="card-header text-bg-primary">
                         <?php echo $row['nombre_producto'] ?>
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">Precio:</h5>
-                        <p class="card-text">$<?php echo $precio_unidad ?></p>
+                        <p class="card-text">$<?php echo $precio ?></p>
 
                         <h6 class="card-subtitle">Cantidad disponible</h6>
                         <p id="cantDisp" class="card-text"><?php echo $row['stock'] ?></p>
                     </div>
                     <div class="card-footer">
                         <div class="text-center">
-                            <a href="metodos/vender.php?id=<?php echo $row['id'] ?>" class="btn btn-success btn-block" name="btnVender">
+                            <a id="idBtnVender" href="metodos/vender.php?id=<?php echo $row['id'] ?>" class="btn btn-success btn-block" name="idBtnVender">
                                 Vender
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
+            
+            <script type="text/javascript">
+                btnVenderProducto = document.getElementById("idBtnVender");
+                cantidad = "<?php $stock?>";
+                producto = document.getElementById("dvProducto");
+                disabledBtn = document.getElementById("idBtnVender");
+                disabledBtn.disabled = true;
+                producto.style.display='none';
 
+                cantidad = parseInt(cantidad);
+
+                if (cantidad < 1) {
+                    btnVenderProducto.disabled = true;
+                } else {
+                    btnVenderProducto.disabled = false;
+                }
+
+                if(cantidad < 1 ){
+                    producto.style.display='none';
+                }else{    
+                    producto.style.display='';
+                }
+            </script>
+            
     <?php } ?>
-        
     </div>
     <br>
     <div class="row" >
