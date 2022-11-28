@@ -44,30 +44,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <script type="text/javascript">
-                btnVenderProducto = document.getElementById("idBtnVender");
-                cantidad = "<?php $stock?>";
-                producto = document.getElementById("dvProducto");
-                disabledBtn = document.getElementById("idBtnVender");
-                disabledBtn.disabled = true;
-                producto.style.display='none';
-
-                cantidad = parseInt(cantidad);
-
-                if (cantidad < 1) {
-                    btnVenderProducto.disabled = true;
-                } else {
-                    btnVenderProducto.disabled = false;
-                }
-
-                if(cantidad < 1 ){
-                    producto.style.display='none';
-                }else{    
-                    producto.style.display='';
-                }
-            </script>
+            </div>            
             
     <?php } ?>
     </div>
@@ -84,7 +61,7 @@
                     <th>Total Vendido</th>
                     <tbody>
                         <?php
-                        $query = "SELECT nombre_producto, referencia, vendidos, valor FROM ventas v INNER JOIN producto p on v.id_producto = p.id";
+                        $query = "SELECT nombre_producto, referencia, vendidos, valor FROM ventas v INNER JOIN producto p on v.id_producto = p.id  order by idVenta DESC";
                         $result_producto = mysqli_query($conn, $query);
 
                         while($row = mysqli_fetch_array($result_producto)){ ?>
